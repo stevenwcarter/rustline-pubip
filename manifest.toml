@@ -2,5 +2,9 @@
 # built .wasm as the `rustline-manifest` custom section (see src/lib.rs), so
 # it survives distribution -- `plugin install` only downloads the .wasm.
 name = "pubip"
-version = "0.1.0"
-requested_urls = ["https://api.ipify.org*"]
+version = "0.1.1"
+# Two patterns, not a single "https://api.ipify.org*" glob: globset's `*`
+# crosses every character, including '.', so a bare host* pattern also
+# matches an attacker-registrable host like https://api.ipify.org.evil.example.
+# The bare host covers the default fetch URL; the /* covers any path under it.
+requested_urls = ["https://api.ipify.org", "https://api.ipify.org/*"]

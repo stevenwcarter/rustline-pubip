@@ -11,10 +11,17 @@ and the plugin can only reach URLs you explicitly allow.
 ## Install
 
     rustline plugin install stevenwcarter/rustline-pubip --name pubip
-    rustline plugin approve pubip        # grants: https://api.ipify.org*
+    rustline plugin approve pubip        # grants: https://api.ipify.org + https://api.ipify.org/*
 
 (`--name pubip` is only needed on rustline v0.1.0, whose default install
 name came from the repo; newer builds derive it from the release asset.)
+
+The manifest requests two patterns rather than one `https://api.ipify.org*`
+glob: `*` crosses every character (including `.`), so a single host* glob
+would also match an attacker-registrable host like
+`https://api.ipify.org.evil.example`. Splitting into the bare host (the
+default fetch URL) plus a `/*` path pattern keeps the grant scoped to the
+real host exactly.
 
 Place it:
 
